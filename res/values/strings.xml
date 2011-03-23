@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	~ This file is part of Dijon Parking <http://code.google.com/p/dijon-parking/>
+	~
+	~ Dijon Parking is free software: you can redistribute it and/or modify
+	~ it under the terms of the GNU General Public License as published by
+	~ the Free Software Foundation, either version 3 of the License, or
+	~ (at your option) any later version.
+	~
+	~ Dijon Parking is distributed in the hope that it will be useful,
+	~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+	~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	~ GNU General Public License for more details.
+	~
+	~ You should have received a copy of the GNU General Public License
+	~ along with Dijon Parking.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+    <string name="app_name">Dijon Parking</string>
+    <string name="apiKey">noneed</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading">Loading...</string>
+    <string name="network_error">A network error has occured</string>
+    <string name="userAgent">Android - Dijon Parking Dev Version</string>
+    <string name="placelibreindispo">Information not available</string>
+    <string name="placelibre">Free parking space:</string>
+    <string name="placeslibres">Spaces:</string>
+    <string name="internalerror">An internal error has occured</string>
+    <string name="retry">Retry</string>
+    <string name="quit">Close</string>
+    <string name="about">À propos</string>
+    <string name="descriptionabout">Application sous licence GNU GPLv3.\nVersion under development. Bug reports and ideas are welcome.\n\nDijon Parking is not an official application of the City of Dijon\n\nThe data are supplied by the City of Dijon.</string>
+</resources>
