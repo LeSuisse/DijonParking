@@ -19,7 +19,9 @@ package org.dijonparking.xml;
 
 import java.util.HashMap;
 
-public class Parking {
+import android.location.Location;
+
+public class Parking implements Comparable<Parking>{
 	private String id;
 	private String nom;
 	private Integer capTotale;
@@ -28,6 +30,7 @@ public class Parking {
 	private Integer nbPlaceDispoAbo;
 	private HashMap<String, String> tarifs;
 	private HashMap<String, String> tarifsAbo;
+	private Integer distance;
 
 	public Parking() {
 		
@@ -95,5 +98,89 @@ public class Parking {
 
 	public void setTarifsAbo(HashMap<String, String> tarifsAbo) {
 		this.tarifsAbo = tarifsAbo;
+	}
+
+	//Q&D
+	public double getLatitude() {
+		double res = 0;
+		
+		if (id.equals("CLEMENCEAU"))
+			res = 47.329111;
+		else if (id.equals("CONDORCET"))
+			res = 47.319671;
+		else if (id.equals("CONSERVATOIRE"))
+			res = 47.327281;
+		else if (id.equals("DARCY"))
+			res = 47.323347;
+		else if (id.equals("DAUPHINE"))
+			res = 47.321591;
+		else if (id.equals("GRANGIER"))
+			res = 47.323178;
+		else if (id.equals("MALRAUX"))
+			res = 47.327281;
+		else if (id.equals("SAINTE_ANNE"))
+			res = 47.318575;
+		else if (id.equals("TIVOLI"))
+			res = 47.316581;
+		else if (id.equals("TREMOUILLE"))
+			res = 47.325631;
+		
+		return res;
+	}
+
+	//Q&D
+	public double getLongitude() {
+		double res = 0;
+		
+		if (id.equals("CLEMENCEAU"))
+			res = 5.05137;
+		else if (id.equals("CONDORCET"))
+			res= 5.033303;
+		else if (id.equals("CONSERVATOIRE"))
+			res = 5.049644;
+		else if (id.equals("DARCY"))
+			res = 5.03369;
+		else if (id.equals("DAUPHINE"))
+			res = 5.037532;
+		else if (id.equals("GRANGIER"))
+			res = 5.037631;
+		else if (id.equals("MALRAUX"))
+			res = 5.049644;
+		else if (id.equals("SAINTE_ANNE"))
+			res = 5.038309;
+		else if (id.equals("TIVOLI"))
+			res = 5.033679;
+		else if (id.equals("TREMOUILLE"))
+			res = 5.040326;
+		
+		return res;
+	}
+
+	public Integer getDistance() {
+		return distance;
+	}
+
+	//Calcul de la distance séparant le parking de la position
+	public void setDistance(Location currentLoc) {
+		if (getLatitude() == 0 || getLongitude() == 0 || currentLoc == null)
+			distance = null;
+		else {
+			Location parkingLoc = new Location("");
+			parkingLoc.setLatitude(getLatitude());
+			parkingLoc.setLongitude(getLongitude());
+			distance = (int) parkingLoc.distanceTo(currentLoc);
+		}
+	}
+
+	@Override
+	public int compareTo(Parking another) {
+		int res = 0;
+		if (another.distance == null) 
+			res = 1;
+		else if (distance == null)
+			res = -1;
+		else
+			res = distance - another.distance;
+		return res;
 	}
 }

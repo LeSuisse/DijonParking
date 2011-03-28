@@ -17,6 +17,7 @@
  */
 package org.dijonparking.gui;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.dijonparking.R;
@@ -45,6 +46,7 @@ public class ListParkingAdapter extends ArrayAdapter<Parking>{
 		ImageView icone;
 		TextView nomParking;
 		TextView placeDispo;
+		TextView distance;
 	}
 	
 	@Override
@@ -57,6 +59,7 @@ public class ListParkingAdapter extends ArrayAdapter<Parking>{
 			holder.icone = (ImageView) convertView.findViewById(R.id.parking_dispo_icone);
 			holder.nomParking = (TextView) convertView.findViewById(R.id.nom_parking);
 			holder.placeDispo = (TextView) convertView.findViewById(R.id.nombre_place_dispo);
+			holder.distance = (TextView) convertView.findViewById(R.id.distance_parking);
 			
 			convertView.setTag(holder);
 		}
@@ -90,6 +93,11 @@ public class ListParkingAdapter extends ArrayAdapter<Parking>{
 			holder.icone.setImageResource(R.drawable.orangepark);
 		else
 			holder.icone.setImageResource(R.drawable.greenpark);
+		
+		if (parking.get(position).getDistance() != null) {
+			DecimalFormat df = new DecimalFormat("0.0");
+			holder.distance.setText(df.format(((double)parking.get(position).getDistance())/1000) + " km");
+		}
 		
 		return convertView;
 		

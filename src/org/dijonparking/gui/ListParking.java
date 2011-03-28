@@ -18,6 +18,7 @@
 package org.dijonparking.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.dijonparking.R;
 import org.dijonparking.xml.ContainerParking;
@@ -26,7 +27,12 @@ import org.dijonparking.xml.Parking;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,20 +42,35 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListParking extends ListActivity {
+public class ListParking extends ListActivity  implements LocationListener {
 	private ListView listView;
+	private ArrayList<Parking> parkings;
+	private LocationManager locationManager;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listparking);
-        
+        startGps();
         listView = getListView();
         
         new DownloadAndParse().execute();
+        
 
     }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	startGps();
+    }
+    
+    @Override
+    public void onPause() {
+		super.onPause();
+		locationManager.removeUpdates(this);
+	}
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,7 +89,7 @@ public class ListParking extends ListActivity {
             AlertDialog.Builder about = new AlertDialog.Builder(this);
             about.setTitle(R.string.about);
             View changes = getLayoutInflater().inflate(R.layout.about, null);
-            ((TextView) changes.findViewById(R.id.version_about)).setText("Dijon Parking 0.0.1");
+            ((TextView) changes.findViewById(R.id.version_about)).setText("Dijon Parking "+getText(R.string.version_name));
             ((TextView) changes.findViewById(R.id.description_about)).setText(getText(R.string.descriptionabout));
             about.setView(changes).show();
 			return true;
@@ -107,13 +128,11 @@ public class ListParking extends ListActivity {
 			if (error) {
 				internalError();
 			}
-			else
-				updateListView(listParking);
+			else {
+				parkings = listParking;
+				updateListView();
+			}
 		}
-    }
-
-    private void updateListView(ArrayList<Parking> park) {
-    	listView.setAdapter(new ListParkingAdapter(this, park));
     }
 
     private void internalError() {
@@ -134,4 +153,50 @@ public class ListParking extends ListActivity {
     	});
     	builder.show();
     }
+    
+    private void updateListView() {
+    	listView.setAdapter(new ListParkingAdapter(this, parkings));
+    }
+    
+    private void startGps() {
+    	locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+    	Criteria criteria = new Criteria();
+    	criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    	criteria.setAltitudeRequired(false);
+    	criteria.setBearingRequired(false);
+    	criteria.setCostAllowed(false);
+    	criteria.setSpeedRequired(false);
+    	
+    	String bestProvider = locationManager.getBestProvider(criteria, false);
+    	
+    	locationManager.requestLocationUpdates(bestProvider, 30000, 40, this);
+    }
+
+    private void updateLocation(Location location) {
+    	for (Parking parking : parkings) {
+    		parking.setDistance(location);
+    	}
+    	Collections.sort(parkings);
+    }
+    
+	@Override
+	public void onLocationChanged(Location location) {
+		updateLocation(location);
+		updateListView();
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
 }

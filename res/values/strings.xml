@@ -29,5 +29,6 @@
     <string name="retry">Retry</string>
     <string name="quit">Close</string>
     <string name="about">À propos</string>
-    <string name="descriptionabout">Application sous licence GNU GPLv3.\nVersion under development. Bug reports and ideas are welcome.\n\nDijon Parking is not an official application of the City of Dijon\n\nThe data are supplied by the City of Dijon.</string>
+    <string name="descriptionabout">Application under GNU GPLv3.\nVersion under development. Bug reports and ideas are welcome.\n\nDijon Parking is not an official application of the City of Dijon\n\nThe data are supplied by the City of Dijon.</string>
+    <string name="version_name">0.0.3</string>
 </resources>

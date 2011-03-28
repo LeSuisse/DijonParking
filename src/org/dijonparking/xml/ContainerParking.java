@@ -31,7 +31,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ContainerParking {
 	private final static String URL_XML = "http://webservices.dijon.fr/parkings.xml";
 	private final static String ENCODING = "ISO-8859-1";
-	private final static String USER_AGENT = "Android Dijon Parking - Dev Market 0.0.1";
+	private final static String USER_AGENT = "Android Dijon Parking - Market Release";
 	
 	public static ArrayList<Parking> getParkings() throws Exception {
 		//Obtention instance d'un parseur SAX
