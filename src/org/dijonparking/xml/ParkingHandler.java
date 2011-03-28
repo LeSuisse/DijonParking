@@ -25,21 +25,21 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class ParkingHandler extends DefaultHandler {
 	//Tags XLM
-	private final String PARKING = "parking";
-	private final String ID = "code";
-	private final String NOM = "nom";
-	private final String CAP_TOTALE = "capaciteTotale";
-	private final String NB_PLACE_DISPO_TOTAL = "nbPlaceDispo";
-	private final String NB_PLACE_DISPO_HORAIRE = "nbPlaceDispoHoraire";
-	private final String NB_PLACE_DISPO_ABONNE = "nbPlaceDispoAbonne";
-	private final String TARIFS = "tarifParkings";
-	private final String TARIFS_HORAIRE = "TarifParking";
-	private final String DUREE = "duree";
-	private final String MONTANT = "montant";
-	private final String TARIFS_ABO = "tarifsAbonnements";
-	private final String TARIFS_HORAIRE_ABO = "TarifsAbonnement";
-	private final String DUREE_ABO = "abonnement";
-	private final String MONTANT_ABO = "tarif";
+	private final static String PARKING = "parking";
+	private final static String ID = "code";
+	private final static String NOM = "nom";
+	private final static String CAP_TOTALE = "capaciteTotale";
+	private final static String NB_PLACE_DISPO_TOTAL = "nbPlaceDispo";
+	private final static String NB_PLACE_DISPO_HORAIRE = "nbPlaceDispoHoraire";
+	private final static String NB_PLACE_DISPO_ABONNE = "nbPlaceDispoAbonne";
+	private final static String TARIFS = "tarifParkings";
+	private final static String TARIFS_HORAIRE = "TarifParking";
+	private final static String DUREE = "duree";
+	private final static String MONTANT = "montant";
+	private final static String TARIFS_ABO = "tarifsAbonnements";
+	private final static String TARIFS_HORAIRE_ABO = "TarifsAbonnement";
+	private final static String DUREE_ABO = "abonnement";
+	private final static String MONTANT_ABO = "tarif";
 	
 	//ArrayList des parkings contenus dans le fichier XML	
 	private ArrayList<Parking> arlParkings;
@@ -51,6 +51,10 @@ public class ParkingHandler extends DefaultHandler {
 	private String duree;
 	private String montant;
 	private HashMap<String, String> tarifs;
+	
+	//Fix pour le parking Saint Anne
+	private Parking saintanne = null;
+	private Parking sainteanne = null;
 	
 	@Override
 	public void startDocument() {
@@ -116,6 +120,12 @@ public class ParkingHandler extends DefaultHandler {
 		}
 		else if (localName.equalsIgnoreCase(PARKING)) {
 			arlParkings.add(parkingCourant);
+			//FIx pour le parking Saint Anne
+			if(parkingCourant.getId().equalsIgnoreCase("SAINTE_ANNE"))
+				sainteanne = parkingCourant;
+			else if (parkingCourant.getId().equalsIgnoreCase("SAINT-ANNE"))
+				saintanne = parkingCourant;
+			
 		}
 		
 	}
@@ -127,14 +137,6 @@ public class ParkingHandler extends DefaultHandler {
 	
 	public ArrayList<Parking> getParkings() {
 		//Fix pour le parking Saint Anne
-		Parking saintanne = null;
-		Parking sainteanne = null;
-		for(Parking park : arlParkings) {
-			if (park.getId().equalsIgnoreCase("SAINTE_ANNE"))
-				sainteanne = park;
-			else if (park.getId().equalsIgnoreCase("SAINT-ANNE"))
-				saintanne = park;
-		}
 		if (saintanne != null && sainteanne != null) {
 			sainteanne.setNom(saintanne.getNom());
 			sainteanne.setCapTotale(saintanne.getCapTotale());
