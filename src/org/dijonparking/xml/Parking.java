@@ -171,6 +171,10 @@ public class Parking implements Comparable<Parking>{
 			distance = (int) parkingLoc.distanceTo(currentLoc);
 		}
 	}
+	
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
 
 	@Override
 	public int compareTo(Parking another) {
@@ -181,6 +185,20 @@ public class Parking implements Comparable<Parking>{
 			res = -1;
 		else
 			res = distance - another.distance;
+		return res;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		boolean res = false;
+		if (this == o)
+			res = true;
+		else if (o instanceof Parking) {
+			Parking other = (Parking) o;
+			if (id.equals(other.id)) {
+				res = true;
+			}
+		}
 		return res;
 	}
 }

@@ -39,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -129,6 +130,13 @@ public class ListParking extends ListActivity  implements LocationListener {
 				internalError();
 			}
 			else {
+				if (parkings != null) {
+					for(Parking park : parkings) {
+						int res = listParking.indexOf(park);
+						if (res != -1 && park.getDistance() != null)
+							listParking.get(res).setDistance(park.getDistance());
+					}
+				}
 				parkings = listParking;
 				updateListView();
 			}
@@ -155,7 +163,10 @@ public class ListParking extends ListActivity  implements LocationListener {
     }
     
     private void updateListView() {
-    	listView.setAdapter(new ListParkingAdapter(this, parkings));
+    	if (listView.getAdapter() == null )
+    		listView.setAdapter(new ListParkingAdapter(this, parkings));
+    	else
+    		((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
     
     private void startGps() {
