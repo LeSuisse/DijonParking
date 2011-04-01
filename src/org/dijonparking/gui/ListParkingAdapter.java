@@ -69,23 +69,23 @@ public class ListParkingAdapter extends ArrayAdapter<Parking>{
 		
 		holder.nomParking.setText(parking.get(position).getNom());
 
-		Integer placeLibreDispo = parking.get(position).getNbPlaceDispoHoraire();
-		if (placeLibreDispo == null) {
+		int placeLibreDispo = parking.get(position).getNbPlaceDispoHoraire();
+		if (placeLibreDispo < 0) {
 			holder.placeDispo.setText(getContext().getText(R.string.placelibreindispo));
 		}
 		else if (placeLibreDispo == 0 || placeLibreDispo == 1) {
-			holder.placeDispo.setText(getContext().getText(R.string.placelibre)+" "+placeLibreDispo.toString());
+			holder.placeDispo.setText(getContext().getText(R.string.placelibre)+" "+placeLibreDispo);
 		}
 		else {
-			holder.placeDispo.setText(getContext().getText(R.string.placeslibres)+" "+placeLibreDispo.toString());
+			holder.placeDispo.setText(getContext().getText(R.string.placeslibres)+" "+placeLibreDispo);
 		}
 		
 		//Calcul de l'image à afficher
-		Double ratioLibre = null;
-		if (parking.get(position).getNbPlaceDispoTotal() != null && parking.get(position).getCapTotale() != null)
+		double ratioLibre = -1;
+		if (parking.get(position).getNbPlaceDispoTotal() >= 0 && parking.get(position).getCapTotale() >= 0)
 			ratioLibre = (double) parking.get(position).getNbPlaceDispoTotal() / (double) parking.get(position).getCapTotale();
 
-		if (ratioLibre == null || ratioLibre < 0)
+		if (ratioLibre < 0)
 			holder.icone.setImageResource(R.drawable.unpark);
 		else if (ratioLibre < 0.2)
 			holder.icone.setImageResource(R.drawable.redpark);
@@ -94,7 +94,8 @@ public class ListParkingAdapter extends ArrayAdapter<Parking>{
 		else
 			holder.icone.setImageResource(R.drawable.greenpark);
 		
-		if (parking.get(position).getDistance() != null) {
+		//Affichage distance
+		if (parking.get(position).getDistance() >= 0) {
 			DecimalFormat df = new DecimalFormat("0.0");
 			holder.distance.setText(df.format(((double)parking.get(position).getDistance())/1000) + " km");
 		}

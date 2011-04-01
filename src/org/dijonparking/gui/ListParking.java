@@ -133,7 +133,7 @@ public class ListParking extends ListActivity  implements LocationListener {
 				if (parkings != null) {
 					for(Parking park : parkings) {
 						int res = listParking.indexOf(park);
-						if (res != -1 && park.getDistance() != null)
+						if (res != -1 && park.getDistance() >= 0)
 							listParking.get(res).setDistance(park.getDistance());
 					}
 				}

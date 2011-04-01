@@ -24,13 +24,13 @@ import android.location.Location;
 public class Parking implements Comparable<Parking>{
 	private String id;
 	private String nom;
-	private Integer capTotale;
-	private Integer nbPlaceDispoTotal;
-	private Integer nbPlaceDispoHoraire;
-	private Integer nbPlaceDispoAbo;
+	private int capTotale = -1;
+	private int nbPlaceDispoTotal = -1;
+	private int nbPlaceDispoHoraire = -1;
+	private int nbPlaceDispoAbo = -1;
 	private HashMap<String, String> tarifs;
 	private HashMap<String, String> tarifsAbo;
-	private Integer distance;
+	private int distance = -1;
 
 	public Parking() {
 		
@@ -52,35 +52,35 @@ public class Parking implements Comparable<Parking>{
 		this.nom = nom;
 	}
 
-	public Integer getCapTotale() {
+	public int getCapTotale() {
 		return capTotale;
 	}
 
-	public void setCapTotale(Integer capTotale) {
+	public void setCapTotale(int capTotale) {
 		this.capTotale = capTotale;
 	}
 
-	public Integer getNbPlaceDispoTotal() {
+	public int getNbPlaceDispoTotal() {
 		return nbPlaceDispoTotal;
 	}
 
-	public void setNbPlaceDispoTotal(Integer nbPlaceDispoTotal) {
+	public void setNbPlaceDispoTotal(int nbPlaceDispoTotal) {
 		this.nbPlaceDispoTotal = nbPlaceDispoTotal;
 	}
 
-	public Integer getNbPlaceDispoHoraire() {
+	public int getNbPlaceDispoHoraire() {
 		return nbPlaceDispoHoraire;
 	}
 
-	public void setNbPlaceDispoHoraire(Integer nbPlaceDispoHoraire) {
+	public void setNbPlaceDispoHoraire(int nbPlaceDispoHoraire) {
 		this.nbPlaceDispoHoraire = nbPlaceDispoHoraire;
 	}
 
-	public Integer getNbPlaceDispoAbo() {
+	public int getNbPlaceDispoAbo() {
 		return nbPlaceDispoAbo;
 	}
 
-	public void setNbPlaceDispoAbo(Integer nbPlaceDispoAbo) {
+	public void setNbPlaceDispoAbo(int nbPlaceDispoAbo) {
 		this.nbPlaceDispoAbo = nbPlaceDispoAbo;
 	}
 
@@ -156,14 +156,14 @@ public class Parking implements Comparable<Parking>{
 		return res;
 	}
 
-	public Integer getDistance() {
+	public int getDistance() {
 		return distance;
 	}
 
 	//Calcul de la distance séparant le parking de la position
 	public void setDistance(Location currentLoc) {
 		if (getLatitude() == 0 || getLongitude() == 0 || currentLoc == null)
-			distance = null;
+			distance = -1;
 		else {
 			Location parkingLoc = new Location("");
 			parkingLoc.setLatitude(getLatitude());
@@ -179,9 +179,9 @@ public class Parking implements Comparable<Parking>{
 	@Override
 	public int compareTo(Parking another) {
 		int res = 0;
-		if (another.distance == null) 
+		if (another.distance < 0) 
 			res = 1;
-		else if (distance == null)
+		else if (distance < 0)
 			res = -1;
 		else
 			res = distance - another.distance;
