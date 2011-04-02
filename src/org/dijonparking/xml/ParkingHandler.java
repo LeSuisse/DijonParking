@@ -18,10 +18,11 @@
 package org.dijonparking.xml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
+import android.os.Bundle;
 
 public class ParkingHandler extends DefaultHandler {
 	//Tags XLM
@@ -50,7 +51,7 @@ public class ParkingHandler extends DefaultHandler {
 	//Stockage info tarifs
 	private String duree;
 	private String montant;
-	private HashMap<String, String> tarifs;
+	private Bundle tarifs;
 	
 	//Fix pour le parking Saint Anne
 	private Parking saintanne = null;
@@ -67,10 +68,10 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant = new Parking();
 		}
 		else if (localName.equalsIgnoreCase(TARIFS)) {
-			tarifs = new HashMap<String, String>();
+			tarifs = new Bundle();
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_ABO)) {
-			tarifs = new HashMap<String, String>();
+			tarifs = new Bundle();
 		}
 	}
 	
@@ -98,7 +99,7 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant.setTarifs(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE)) {
-			tarifs.put(duree, montant);
+			tarifs.putString(duree, montant);
 		}
 		else if (localName.equalsIgnoreCase(DUREE)) {
 			duree = valeurCourante;
@@ -110,7 +111,7 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant.setTarifsAbo(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE_ABO)) {
-			tarifs.put(duree, montant);
+			tarifs.putString(duree, montant);
 		}
 		else if (localName.equalsIgnoreCase(DUREE_ABO)) {
 			duree = valeurCourante;
@@ -120,7 +121,7 @@ public class ParkingHandler extends DefaultHandler {
 		}
 		else if (localName.equalsIgnoreCase(PARKING)) {
 			arlParkings.add(parkingCourant);
-			//FIx pour le parking Saint Anne
+			//Fix pour le parking Saint Anne
 			if(parkingCourant.getId().equalsIgnoreCase("SAINTE_ANNE"))
 				sainteanne = parkingCourant;
 			else if (parkingCourant.getId().equalsIgnoreCase("SAINT-ANNE"))

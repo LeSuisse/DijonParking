@@ -17,23 +17,38 @@
  */
 package org.dijonparking.xml;
 
-import java.util.HashMap;
-
 import android.location.Location;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Parking implements Comparable<Parking>{
+public class Parking implements Comparable<Parking>, Parcelable{
 	private String id;
 	private String nom;
 	private int capTotale = -1;
 	private int nbPlaceDispoTotal = -1;
 	private int nbPlaceDispoHoraire = -1;
 	private int nbPlaceDispoAbo = -1;
-	private HashMap<String, String> tarifs;
-	private HashMap<String, String> tarifsAbo;
+	//private HashMap<String, String> tarifs;
+	private Bundle tarifs;
+	//private HashMap<String, String> tarifsAbo;
+	private Bundle tarifsAbo;
 	private int distance = -1;
 
 	public Parking() {
 		
+	}
+	
+	protected Parking(Parcel in) {
+		id = in.readString();
+		nom = in.readString();
+		capTotale = in.readInt();
+		nbPlaceDispoTotal = in.readInt();
+		nbPlaceDispoHoraire = in.readInt();
+		nbPlaceDispoAbo = in.readInt();
+		tarifs = in.readBundle();
+		tarifsAbo = in.readBundle();
+		distance = in.readInt();
 	}
 
 	public String getId() {
@@ -84,19 +99,19 @@ public class Parking implements Comparable<Parking>{
 		this.nbPlaceDispoAbo = nbPlaceDispoAbo;
 	}
 
-	public HashMap<String, String> getTarifs() {
+	public Bundle getTarifs() {
 		return tarifs;
 	}
 
-	public void setTarifs(HashMap<String, String> tarifs) {
+	public void setTarifs(Bundle tarifs) {
 		this.tarifs = tarifs;
 	}
 
-	public HashMap<String, String> getTarifsAbo() {
+	public Bundle getTarifsAbo() {
 		return tarifsAbo;
 	}
 
-	public void setTarifsAbo(HashMap<String, String> tarifsAbo) {
+	public void setTarifsAbo(Bundle tarifsAbo) {
 		this.tarifsAbo = tarifsAbo;
 	}
 
@@ -201,4 +216,35 @@ public class Parking implements Comparable<Parking>{
 		}
 		return res;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(nom);
+		dest.writeInt(capTotale);
+		dest.writeInt(nbPlaceDispoTotal);
+		dest.writeInt(nbPlaceDispoHoraire);
+		dest.writeInt(nbPlaceDispoAbo);
+		dest.writeBundle(tarifs);
+		dest.writeBundle(tarifsAbo);
+		dest.writeInt(distance);
+	}
+	
+	public static final Parcelable.Creator<Parking> CREATOR = new Parcelable.Creator<Parking>() {
+
+		@Override
+		public Parking createFromParcel(Parcel source) {
+			return new Parking(source);
+		}
+
+		@Override
+		public Parking[] newArray(int size) {
+			return new Parking[size];
+		}
+	};
 }
