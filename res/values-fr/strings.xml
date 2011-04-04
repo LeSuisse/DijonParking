@@ -21,11 +21,18 @@
     <string name="network_error">Une erreur réseau est survenue</string>
     <string name="userAgent">Android - Dijon Parking Dev Version</string>
     <string name="placelibreindispo">Nombre de place libre indisponible</string>
-    <string name="placelibre">Place libre :</string>
+    <string name="placelibre">Place libre : </string>
     <string name="placeslibres">Places libres :</string>
     <string name="internalerror">Une erreur interne est survenue</string>
     <string name="retry">Réessayer</string>
     <string name="quit">Quitter</string>
     <string name="about">À propos</string>
     <string name="descriptionabout">Application sous licence GNU GPLv3.\nVersion en cours de développement. Les rapports de bugs et les idées sont les bienvenus.\n\nDijon Parking n\'est pas une application officielle de la Ville de Dijon\n\nLes données sont fournies par la Ville de Dijon.</string>
+    <string name="placelibreabo">Place abonné libre : </string>
+    <string name="placeslibresabo">Places abonnés libres : </string>
+    <string name="placelibreaboindispo">Nombre de place abonné libre indisponible</string>
+    <string name="captotaleindispo">Capacité totale indisponible</string>
+    <string name="captotale">Capacité totale : %d places</string>
+    <string name="tarifshoraires">Tarifs horaires</string>
+    <string name="tarifsabo">Tarifs des abonnements</string>
 </resources>

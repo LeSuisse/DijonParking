@@ -29,6 +29,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -39,6 +40,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,7 +61,16 @@ public class ListParking extends ListActivity  implements LocationListener {
         
         new DownloadAndParse().execute();
         
+        listView.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				Intent it = new Intent(getApplicationContext(), InfoParking.class);
+				it.putExtra("parking", parkings.get(position));
+				startActivity(it);
+				
+			}
+			});
     }
     
     @Override

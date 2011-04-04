@@ -29,9 +29,7 @@ public class Parking implements Comparable<Parking>, Parcelable{
 	private int nbPlaceDispoTotal = -1;
 	private int nbPlaceDispoHoraire = -1;
 	private int nbPlaceDispoAbo = -1;
-	//private HashMap<String, String> tarifs;
 	private Bundle tarifs;
-	//private HashMap<String, String> tarifsAbo;
 	private Bundle tarifsAbo;
 	private int distance = -1;
 
@@ -113,6 +111,7 @@ public class Parking implements Comparable<Parking>, Parcelable{
 
 	public void setTarifsAbo(Bundle tarifsAbo) {
 		this.tarifsAbo = tarifsAbo;
+
 	}
 
 	//Q&D

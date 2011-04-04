@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+  <ImageView
+  	android:id="@+id/parking_dispo_icone"
+  	android:layout_width="wrap_content"
+  	android:layout_height="wrap_content"
+  	android:padding="10dip"/>
+  <TextView
+  	android:id="@+id/nom_parking"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:textSize="21dip"
+  	android:textStyle="bold"
+  	android:layout_toRightOf="@id/parking_dispo_icone"
+  	android:paddingTop="2dip"
+  	android:paddingBottom="7dip"></TextView>
+  <TextView
+  	android:id="@+id/nombre_place_dispo"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_below="@id/nom_parking"
+  	android:textSize="15dip"
+  	android:paddingLeft="3dip"></TextView>
+  <TextView
+  	android:id="@+id/nombre_place_dispo_abo"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_below="@id/nombre_place_dispo"
+  	android:textSize="15dip"
+  	android:paddingLeft="3dip"></TextView>
+  <TextView
+  	android:id="@+id/capacite_totale"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_below="@id/nombre_place_dispo_abo"
+  	android:textSize="15dip"
+  	android:paddingLeft="3dip"></TextView>
+  	
+  <ExpandableListView
+  	android:id="@id/android:list"
+  	android:layout_width="fill_parent"
+  	android:layout_height="wrap_content"
+  	android:layout_below="@id/capacite_totale"></ExpandableListView>
+</RelativeLayout>

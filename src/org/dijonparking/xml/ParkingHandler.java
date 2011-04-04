@@ -38,7 +38,7 @@ public class ParkingHandler extends DefaultHandler {
 	private final static String DUREE = "duree";
 	private final static String MONTANT = "montant";
 	private final static String TARIFS_ABO = "tarifsAbonnements";
-	private final static String TARIFS_HORAIRE_ABO = "TarifsAbonnement";
+	private final static String TARIFS_HORAIRE_ABO = "TarifAbonnement";
 	private final static String DUREE_ABO = "abonnement";
 	private final static String MONTANT_ABO = "tarif";
 	
@@ -99,25 +99,25 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant.setTarifs(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE)) {
-			tarifs.putString(duree, montant);
+			tarifs.putString(montant, duree);
 		}
 		else if (localName.equalsIgnoreCase(DUREE)) {
 			duree = valeurCourante;
 		}
 		else if (localName.equalsIgnoreCase(MONTANT)) {
-			montant = valeurCourante;
+			montant = valeurCourante.split("( euros)|( euro)")[0].replace(',', '.');
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_ABO)) {
 			parkingCourant.setTarifsAbo(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE_ABO)) {
-			tarifs.putString(duree, montant);
+			tarifs.putString(montant, duree);
 		}
 		else if (localName.equalsIgnoreCase(DUREE_ABO)) {
 			duree = valeurCourante;
 		}
 		else if (localName.equalsIgnoreCase(MONTANT_ABO)) {
-			montant = valeurCourante;
+			montant = valeurCourante.split("( euros)|( euro)")[0].replace(',', '.');
 		}
 		else if (localName.equalsIgnoreCase(PARKING)) {
 			arlParkings.add(parkingCourant);
