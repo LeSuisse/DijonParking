@@ -35,4 +35,6 @@
     <string name="captotale">Capacité totale : %d places</string>
     <string name="tarifshoraires">Tarifs horaires</string>
     <string name="tarifsabo">Tarifs des abonnements</string>
+    <string name="itineraire">Itinéraire</string>
+    <string name="info">Informations</string>
 </resources>

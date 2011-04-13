@@ -17,6 +17,11 @@
  */
 package org.dijonparking.gui;
 
+import greendroid.widget.QuickAction;
+import greendroid.widget.QuickActionBar;
+import greendroid.widget.QuickActionWidget;
+import greendroid.widget.QuickActionWidget.OnQuickActionClickListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -30,10 +35,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -48,8 +57,10 @@ import android.widget.TextView;
 
 public class ListParking extends ListActivity  implements LocationListener {
 	private ListView listView;
+	private QuickActionBar mBar;
 	private ArrayList<Parking> parkings;
 	private LocationManager locationManager;
+	private int positionListvClicked;
 	
     /** Called when the activity is first created. */
     @Override
@@ -57,6 +68,7 @@ public class ListParking extends ListActivity  implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.listparking);
         startGps();
+        prepareQuickAction();
         listView = getListView();
         
         new DownloadAndParse().execute();
@@ -65,10 +77,13 @@ public class ListParking extends ListActivity  implements LocationListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				Intent it = new Intent(getApplicationContext(), InfoParking.class);
-				it.putExtra("parking", parkings.get(position));
-				startActivity(it);
-				
+				positionListvClicked = position;
+				if (parkings.get(position).getLatitude() != 0 && parkings.get(position).getLongitude() != 0) {
+					mBar.show(arg1);
+				}
+				else {
+					startInfoActivity();
+				}
 			}
 			});
     }
@@ -203,6 +218,20 @@ public class ListParking extends ListActivity  implements LocationListener {
     	Collections.sort(parkings);
     }
     
+    private void startInfoActivity() {
+		Intent it = new Intent(getApplicationContext(), InfoParking.class);
+		it.putExtra("parking", parkings.get(positionListvClicked));
+		startActivity(it);
+    }
+    
+    private void startRouteActivity() {
+    	//Not officially supported
+    	String direction = "google.navigation:q="+parkings.get(positionListvClicked).getLatitude()+","+
+    															parkings.get(positionListvClicked).getLongitude();
+    	Intent it = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(direction));
+    	startActivity(it);
+    }
+    
 	@Override
 	public void onLocationChanged(Location location) {
 		updateLocation(location);
@@ -221,5 +250,35 @@ public class ListParking extends ListActivity  implements LocationListener {
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
+	
+	private void prepareQuickAction() {
+		mBar = new QuickActionBar(this);
+		mBar.addQuickAction(new QuickAction(this, blackDrawable(android.R.drawable.ic_dialog_map), R.string.itineraire));
+		mBar.addQuickAction(new QuickAction(this, blackDrawable(R.drawable.ic_dialog_info), R.string.info));
+		
+		mBar.setOnQuickActionClickListener(new OnQuickActionClickListener() {
+			
+			@Override
+			public void onQuickActionClicked(QuickActionWidget widget, int position) {
+				switch (position) {
+				case 0:
+					startRouteActivity();
+					break;
+				case 1:
+					startInfoActivity();
+					break;
+				default:
+					break;
+				}
+				
+			}
+		});
+	}
+	
+	private Drawable blackDrawable(int drawableId) {
+		Drawable d = getResources().getDrawable(drawableId);
+		d.setColorFilter(new LightingColorFilter(Color.BLACK, Color.BLACK));
+		return d;
 	}
 }
