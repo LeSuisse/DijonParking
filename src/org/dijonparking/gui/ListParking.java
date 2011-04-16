@@ -26,14 +26,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.dijonparking.R;
-import org.dijonparking.xml.ContainerParking;
+import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
@@ -43,7 +41,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -71,7 +68,8 @@ public class ListParking extends ListActivity  implements LocationListener {
         prepareQuickAction();
         listView = getListView();
         
-        new DownloadAndParse().execute();
+    	new DownloadAndParseTask(this).execute();
+        //updateListView();
         
         listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -111,7 +109,7 @@ public class ListParking extends ListActivity  implements LocationListener {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 		case R.id.refresh:
-			new DownloadAndParse().execute();
+	    	new DownloadAndParseTask(this).execute();
 			return true;
 		case R.id.about:
             AlertDialog.Builder about = new AlertDialog.Builder(this);
@@ -126,69 +124,53 @@ public class ListParking extends ListActivity  implements LocationListener {
 		}
     }
     
-    private class DownloadAndParse extends AsyncTask<Void, Void, ArrayList<Parking>> {
-    	private ProgressDialog dialog;
-    	private boolean error = false;
-    	
-    	@Override
-    	protected void onPreExecute() {
-    		dialog = new ProgressDialog(ListParking.this);
-    		dialog.setMessage(getText(R.string.loading));
-    		dialog.show();
-    	}
-    	
-		@Override
-		protected ArrayList<Parking> doInBackground(Void... params) {
-			ArrayList<Parking> listParking = null;
-			try {
-				listParking = ContainerParking.getParkings();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				error = true;
-			}
-			return listParking;
-		}
-    	
-		@Override
-		protected void onPostExecute(ArrayList<Parking> listParking) {
-			dialog.dismiss();
-			if (error) {
-				internalError();
-			}
-			else {
-				if (parkings != null) {
-					for(Parking park : parkings) {
-						int res = listParking.indexOf(park);
-						if (res != -1 && park.getDistance() >= 0)
-							listParking.get(res).setDistance(park.getDistance());
-					}
-				}
-				parkings = listParking;
-				updateListView();
-			}
-		}
-    }
+	@Override
+	public void onLocationChanged(Location location) {
+		updateLocation(location);
+		updateListView();
+	}
 
-    private void internalError() {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(ListParking.this);
-    	builder.setMessage(getText(R.string.internalerror))
-    		   .setCancelable(false)
-    		   .setPositiveButton(getText(R.string.retry), new DialogInterface.OnClickListener() {
-    		@Override
-			public void onClick(DialogInterface dialog, int id) {
-    			new DownloadAndParse().execute();
-    		}
-    	})
-    	.setNegativeButton(getText(R.string.quit), new DialogInterface.OnClickListener() {
-    		@Override
-			public void onClick(DialogInterface dialog, int id) {
-    			finish();
-    		}
-    	});
-    	builder.show();
-    }
+	@Override
+	public void onProviderDisabled(String provider) {
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
     
+	private class DownloadAndParseTask extends DownloaderAndParser {
+
+		public DownloadAndParseTask(Context context) {
+			super(context);
+		}
+		@Override
+		protected void finalOperations(ArrayList<Parking> listParking) {
+			//Évite d'avoir à recalculer la distance après une mise à jour
+            if (parkings != null) {
+                for(Parking park : parkings) {
+                        int res = listParking.indexOf(park);
+                        if (res != -1 && park.getDistance() >= 0)
+                                listParking.get(res).setDistance(park.getDistance());
+                }
+            }
+        parkings = listParking;
+        updateListView();			
+		}
+		
+		@Override
+		protected void restartTask() {
+			new DownloadAndParseTask(getContext()).execute();
+			
+		}
+		
+	}
+	
     private void updateListView() {
     	if (listView.getAdapter() == null )
     		listView.setAdapter(new ListParkingAdapter(this, parkings));
@@ -232,26 +214,6 @@ public class ListParking extends ListActivity  implements LocationListener {
     	startActivity(it);
     }
     
-	@Override
-	public void onLocationChanged(Location location) {
-		updateLocation(location);
-		updateListView();
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
-	
 	private void prepareQuickAction() {
 		mBar = new QuickActionBar(this);
 		mBar.addQuickAction(new QuickAction(this, blackDrawable(android.R.drawable.ic_dialog_map), R.string.itineraire));
