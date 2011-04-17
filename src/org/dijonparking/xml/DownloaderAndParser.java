@@ -54,14 +54,12 @@ public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayLis
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		Log.i("Dijon Parking", "dB");
 		return listParking;
 	}
 	
 	@Override
 	protected void onPostExecute(ArrayList<Parking> listParking) {
 		dialog.dismiss();
-		Log.i("Dijon Parking", "oE");
 		if (listParking == null) {
 			internalError();
 		}
@@ -97,8 +95,4 @@ public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayLis
 	protected abstract void finalOperations(ArrayList<Parking> listParking);
 	protected abstract void restartTask();
 
-	protected void finalOperations() {
-		// TODO Auto-generated method stub
-		
-	}
 }

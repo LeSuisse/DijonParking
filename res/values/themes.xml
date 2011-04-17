@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Theme.DijonParking" parent="@style/Theme.GreenDroid.NoTitleBar">
+	
+		<item name="gdActionBarBackground">@drawable/action_bar_background</item>
+	
+	</style>
+	
+	<dimen name="gd_action_bar_height">35dp</dimen>
+
+</resources>

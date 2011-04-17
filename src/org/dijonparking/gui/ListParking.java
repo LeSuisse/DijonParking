@@ -17,6 +17,10 @@
  */
 package org.dijonparking.gui;
 
+import greendroid.app.GDListActivity;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 import greendroid.widget.QuickAction;
 import greendroid.widget.QuickActionBar;
 import greendroid.widget.QuickActionWidget;
@@ -30,7 +34,6 @@ import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -52,7 +55,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class ListParking extends ListActivity  implements LocationListener {
+public class ListParking extends GDListActivity  implements LocationListener {
 	private ListView listView;
 	private QuickActionBar mBar;
 	private ArrayList<Parking> parkings;
@@ -63,13 +66,14 @@ public class ListParking extends ListActivity  implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.listparking);
         startGps();
         prepareQuickAction();
         listView = getListView();
+        getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
+        getActionBar().addItem(Type.Refresh);
+        getActionBar().addItem(Type.Help);
         
     	new DownloadAndParseTask(this).execute();
-        //updateListView();
         
         listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -122,6 +126,22 @@ public class ListParking extends ListActivity  implements LocationListener {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+    }
+    
+    @Override
+    public boolean onHandleActionBarItemClick (ActionBarItem item, int position) {
+    	switch (position) {
+		case 0:
+			new DownloadAndParseTask(this).execute();
+			((LoaderActionBarItem) item).setLoading(false);
+			return true;
+		case 1:
+			
+			return true;
+		default:
+			return super.onHandleActionBarItemClick(item, position);
+		}
+    	
     }
     
 	@Override
@@ -194,9 +214,11 @@ public class ListParking extends ListActivity  implements LocationListener {
     }
 
     private void updateLocation(Location location) {
+    	//Parcourt de liste de parking pour mettre à jour la distance
     	for (Parking parking : parkings) {
     		parking.setDistance(location);
     	}
+    	//Tri en fonction
     	Collections.sort(parkings);
     }
     

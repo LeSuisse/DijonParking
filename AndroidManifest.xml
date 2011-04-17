@@ -22,10 +22,8 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@style/Theme.GreenDroid">
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:name="greendroid.app.GDApplication" android:theme="@style/Theme.DijonParking">
     	<uses-library android:name="com.google.android.maps"></uses-library>
-        <activity android:label="@string/app_name" android:name="org.dijonparking.gui.Map">
-        </activity>
         <activity android:name=".gui.ListParking" android:label="@string/app_name"
         		  android:configChanges="keyboardHidden|orientation">
             <intent-filter>
