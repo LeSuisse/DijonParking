@@ -1,5 +1,8 @@
 package org.dijonparking.gui;
 
+import greendroid.app.GDExpandableListActivity;
+import greendroid.widget.ActionBarItem.Type;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,13 +11,12 @@ import java.util.TreeMap;
 import org.dijonparking.R;
 import org.dijonparking.xml.Parking;
 
-import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-public class InfoParking extends ExpandableListActivity {
+public class InfoParking extends GDExpandableListActivity {
 
 	private Parking parking;
 	private TreeMap<Float, String> tarifs = null;
@@ -26,6 +28,8 @@ public class InfoParking extends ExpandableListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.infoparking);
+		
+		getActionBar().addItem(Type.Refresh);
 		
 		parking = getIntent().getExtras().getParcelable("parking");
 		
