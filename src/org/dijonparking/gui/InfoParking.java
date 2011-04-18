@@ -1,16 +1,21 @@
 package org.dijonparking.gui;
 
 import greendroid.app.GDExpandableListActivity;
+import greendroid.widget.ActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
+import greendroid.widget.LoaderActionBarItem;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.dijonparking.R;
+import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
@@ -33,6 +38,51 @@ public class InfoParking extends GDExpandableListActivity {
 		
 		parking = getIntent().getExtras().getParcelable("parking");
 		
+		updateParking();
+	}
+	
+	public boolean onHandleActionBarItemClick (ActionBarItem item, int position) {
+		switch (position) {
+		case 0:
+			new DownloadAndParseTask(this).execute();
+			((LoaderActionBarItem) item).setLoading(false);
+			return true;
+
+		default:
+			return super.onHandleActionBarItemClick(item, position);
+		}
+	}
+	
+	private class DownloadAndParseTask extends DownloaderAndParser {
+
+		public DownloadAndParseTask(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected void finalOperations(ArrayList<Parking> listParking) {
+			Iterator<Parking> it = listParking.iterator();
+			Parking park;
+			boolean trouve = false;
+			while (it.hasNext() && !trouve) {
+				park = it.next();
+				if (park.getId().equals(parking.getId())) {
+					parking = park;
+					trouve = true;
+					updateParking();
+				}
+			}
+		}
+
+		@Override
+		protected void restartTask() {
+			new DownloadAndParseTask(getContext()).execute();
+			
+		}
+		
+	}
+	
+	private void updateParking() {
 		//Affichage icone disponibilité parking
 		double ratioLibre = -1;
 		ImageView iconeDispo = (ImageView) findViewById(R.id.parking_dispo_icone);
