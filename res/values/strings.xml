@@ -39,5 +39,11 @@
     <string name="tarifsabo">Subscription Rates</string>
     <string name="itineraire">Directions</string>
     <string name="info">Informations</string>
+    <string name="significationcouleurpoint">Signification de la couleur des parkings :</string>
+    <string name="significationcouleurpointvert">&gt; 40%</string>
+    <string name="nombreplacelibre">Nombre de place libre :</string>
+    <string name="significationcouleurpointorange">> 20 %</string>
+    <string name="significationcouleurpointrouge">> 0 %</string>
+    <string name="significationcouleurpointgris">Non disponible</string>
     
 </resources>

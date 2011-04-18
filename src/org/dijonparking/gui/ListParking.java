@@ -136,7 +136,10 @@ public class ListParking extends GDListActivity  implements LocationListener {
 			((LoaderActionBarItem) item).setLoading(false);
 			return true;
 		case 1:
-			
+			AlertDialog.Builder help = new AlertDialog.Builder(this);
+			help.setTitle(R.string.significationcouleurpoint);
+			View changes = getLayoutInflater().inflate(R.layout.help, null);
+			help.setView(changes).show();
 			return true;
 		default:
 			return super.onHandleActionBarItemClick(item, position);

@@ -37,4 +37,5 @@
     <string name="tarifsabo">Tarifs des abonnements</string>
     <string name="itineraire">Itinéraire</string>
     <string name="info">Informations</string>
+    <string name="significationcouleurpointgris">Non disponible</string>
 </resources>
