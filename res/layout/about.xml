@@ -28,7 +28,7 @@
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
         android:id="@+id/website_about" 
-        android:text="http://code.google.com/p/dijon-parking/"
+        android:text="https://github.com/LeSuisse/DijonParking"
         android:layout_gravity="center"
         android:gravity="center"
         android:paddingBottom="10dip"
