@@ -31,4 +31,8 @@ public class StaticPreferences {
 	public static int getTri() {
 		return tri;
 	}
+	
+	public static void setTri(int prefTri) {
+		tri = prefTri;
+	}
 }

@@ -212,9 +212,9 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		}
 		int res = 0;
 		if (valueAnother < 0) 
-			res = 1;
-		else if (value < 0)
 			res = -1;
+		else if (value < 0)
+			res = 1;
 		else
 			res = value - valueAnother;
 		return res;

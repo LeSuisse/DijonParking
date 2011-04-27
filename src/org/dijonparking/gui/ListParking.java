@@ -27,9 +27,10 @@ import greendroid.widget.QuickActionWidget;
 import greendroid.widget.QuickActionWidget.OnQuickActionClickListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 
 import org.dijonparking.R;
+import org.dijonparking.util.StaticPreferences;
 import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
@@ -45,18 +46,19 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class ListParking extends GDListActivity  implements LocationListener {
 	private ListView listView;
+    private ListParkingAdapter adapter;
 	private QuickActionBar mBar;
 	private ArrayList<Parking> parkings;
 	private LocationManager locationManager;
@@ -66,7 +68,6 @@ public class ListParking extends GDListActivity  implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startGps();
         prepareQuickAction();
         listView = getListView();
         getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
@@ -94,7 +95,10 @@ public class ListParking extends GDListActivity  implements LocationListener {
     @Override
     public void onResume() {
     	super.onResume();
-    	startGps();
+        String prefTri = PreferenceManager.getDefaultSharedPreferences(this).getString("tri", "0");
+        StaticPreferences.setTri(Integer.valueOf(prefTri));
+       	startGps();
+       	updateListView();
     }
     
     @Override
@@ -154,7 +158,6 @@ public class ListParking extends GDListActivity  implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		updateLocation(location);
-		updateListView();
 	}
 
 	@Override
@@ -186,8 +189,9 @@ public class ListParking extends GDListActivity  implements LocationListener {
                                 listParking.get(res).setDistance(park.getDistance());
                 }
             }
-        parkings = listParking;
-        updateListView();			
+            parkings = listParking;
+        
+            updateListView();
 		}
 		
 		@Override
@@ -199,15 +203,25 @@ public class ListParking extends GDListActivity  implements LocationListener {
 	}
 	
     private void updateListView() {
-    	if (listView.getAdapter() == null )
-    		listView.setAdapter(new ListParkingAdapter(this, parkings));
-    	else
-    		((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+    	if (adapter == null) {
+    		if (parkings != null) {
+    			adapter = new ListParkingAdapter(this, parkings);
+    			listView.setAdapter(adapter);
+    		}
+    	}
+    	else {
+    		adapter.sort(new Comparator<Parking>() {
+				@Override
+				public int compare(Parking object1, Parking object2) {
+					return object1.compareTo(object2);
+				}
+			});
+    	}
     }
     
     private void startGps() {
     	locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
+    	
     	Criteria criteria = new Criteria();
     	criteria.setAccuracy(Criteria.ACCURACY_FINE);
     	criteria.setAltitudeRequired(false);
@@ -222,11 +236,12 @@ public class ListParking extends GDListActivity  implements LocationListener {
 
     private void updateLocation(Location location) {
     	//Parcourt de liste de parking pour mettre à jour la distance
-    	for (Parking parking : parkings) {
-    		parking.setDistance(location);
-    	}
-    	//Tri en fonction
-    	Collections.sort(parkings);
+    	if (parkings != null)
+    		for (Parking parking : parkings) {
+    			parking.setDistance(location);
+    		}
+    	
+    	updateListView();
     }
     
     private void startInfoActivity() {
