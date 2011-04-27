@@ -35,6 +35,7 @@ import org.dijonparking.xml.Parking;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.LightingColorFilter;
@@ -71,6 +72,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
         listView = getListView();
         getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
         getActionBar().addItem(Type.Refresh);
+        getActionBar().addItem(Type.Settings);
         getActionBar().addItem(Type.Help);
         
     	new DownloadAndParseTask(this).execute();
@@ -136,6 +138,20 @@ public class ListParking extends GDListActivity  implements LocationListener {
 			((LoaderActionBarItem) item).setLoading(false);
 			return true;
 		case 1:
+			AlertDialog.Builder preferences = new AlertDialog.Builder(this);
+			final CharSequence[] items = getResources().getTextArray(R.array.tri);
+			preferences.setTitle(getText(R.string.tripar));
+			preferences.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					
+				}
+			});
+			preferences.show();
+			return true;
+		case 2:
 			AlertDialog.Builder help = new AlertDialog.Builder(this);
 			help.setTitle(R.string.significationcouleurpoint);
 			View changes = getLayoutInflater().inflate(R.layout.help, null);

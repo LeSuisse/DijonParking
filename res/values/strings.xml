@@ -45,5 +45,10 @@
     <string name="significationcouleurpointorange">> 20 %</string>
     <string name="significationcouleurpointrouge">> 0 %</string>
     <string name="significationcouleurpointgris">Non disponible</string>
+    <string-array name="tri">
+        <item>Proximité</item>
+        <item>Places libres</item>
+    </string-array>
+    <string name="tripar">Trier par...</string>
     
 </resources>
