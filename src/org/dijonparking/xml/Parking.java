@@ -17,6 +17,8 @@
  */
 package org.dijonparking.xml;
 
+import org.dijonparking.util.StaticPreferences;
+
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -192,13 +194,29 @@ public class Parking implements Comparable<Parking>, Parcelable{
 
 	@Override
 	public int compareTo(Parking another) {
+		int value;
+		int valueAnother;
+		switch (StaticPreferences.getTri()) {
+		case StaticPreferences.TRI_PROXIMITE:
+			value = distance;
+			valueAnother = another.distance;
+			break;
+		case StaticPreferences.TRI_NB_PLACES:
+			value = nbPlaceDispoHoraire;
+			valueAnother = another.nbPlaceDispoHoraire;
+			break;
+		default:
+			value = 0;
+			valueAnother = 0;
+			break;
+		}
 		int res = 0;
-		if (another.distance < 0) 
+		if (valueAnother < 0) 
 			res = 1;
-		else if (distance < 0)
+		else if (value < 0)
 			res = -1;
 		else
-			res = distance - another.distance;
+			res = value - valueAnother;
 		return res;
 	}
 

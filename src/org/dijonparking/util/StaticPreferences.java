@@ -15,18 +15,20 @@
  *      along with Dijon Parking.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.dijonparking.gui;
+package org.dijonparking.util;
 
-import org.dijonparking.R;
+/**
+ * Sert uniquement à stocker certaines infos du PreferenceManager afin de pouvoir
+ * y accéder sans avoir le Context
+ *
+ */
+public class StaticPreferences {
+	public final static int TRI_PROXIMITE = 0;
+	public final static int TRI_NB_PLACES = 1;
 
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-
-public class Preferences extends PreferenceActivity {
-
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		addPreferencesFromResource(R.xml.preferences);
+	private static int tri = 0;
+	
+	public static int getTri() {
+		return tri;
 	}
 }
