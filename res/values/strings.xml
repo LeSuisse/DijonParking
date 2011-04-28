@@ -30,27 +30,27 @@
     <string name="quit">Close</string>
     <string name="about">À propos</string>
     <string name="descriptionabout">Application under GNU GPLv3.\nVersion under development. Bug reports and ideas are welcome.\n\nDijon Parking is not an official application of the City of Dijon\n\nThe data are supplied by the City of Dijon.</string>
-    <string name="placelibreabo">Place abonné libre : </string>
-    <string name="placeslibresabo">Places abonnés libres : </string>
-    <string name="placelibreaboindispo">Nombre de place abonné libre indisponible</string>
-    <string name="captotaleindispo">Capacité totale indisponible</string>
-    <string name="captotale">Capacité totale : %d places</string>
+    <string name="placelibreabo">Parking free subscriber:</string>
+    <string name="placeslibresabo">Free parking subscribers:</string>
+    <string name="placelibreaboindispo">Information not available</string>
+    <string name="captotaleindispo">Total capacity unavailable</string>
+    <string name="captotale">Total capacity: %d places</string>
     <string name="tarifshoraires">Hourly Rates</string>
     <string name="tarifsabo">Subscription Rates</string>
     <string name="itineraire">Directions</string>
     <string name="info">Informations</string>
-    <string name="significationcouleurpoint">Signification de la couleur des parkings :</string>
+    <string name="significationcouleurpoint">Meaning of the carparks color:</string>
     <string name="significationcouleurpointvert">&gt; 40%</string>
-    <string name="nombreplacelibre">Nombre de place libre :</string>
+    <string name="nombreplacelibre">Number of free space:</string>
     <string name="significationcouleurpointorange">> 20 %</string>
     <string name="significationcouleurpointrouge">> 0 %</string>
     <string name="significationcouleurpointgris">Non disponible</string>
     <string-array name="tri">
         <item>Proximité</item>
-        <item>Places libres</item>
+        <item>Free spaces</item>
     </string-array>
-    <string name="tripar">Trier par...</string>
-    <string name="settings">Paramètres</string>
-    <string name="organisation">Organisation</string>
+    <string name="tripar">Sort by...</string>
+    <string name="settings">Settings</string>
+    <string name="organisation">organization</string>
     
 </resources>

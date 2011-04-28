@@ -38,4 +38,13 @@
     <string name="itineraire">Itinéraire</string>
     <string name="info">Informations</string>
     <string name="significationcouleurpointgris">Non disponible</string>
+    <string name="significationcouleurpoint">Signification de la couleur des parkings :</string>
+    <string name="nombreplacelibre">Nombre de place libre :</string>
+    <string-array name="tri">
+        <item>Proximité</item>
+        <item>Places libres</item>
+    </string-array>
+    <string name="tripar">Trier par...</string>
+    <string name="settings">Paramètres</string>
+    <string name="organisation">Organisation</string>
 </resources>
