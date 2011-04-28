@@ -51,5 +51,6 @@
     </string-array>
     <string name="tripar">Trier par...</string>
     <string name="settings">Paramètres</string>
+    <string name="organisation">Organisation</string>
     
 </resources>
