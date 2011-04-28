@@ -120,6 +120,9 @@ public class ListParking extends GDListActivity  implements LocationListener {
 		case R.id.refresh:
 	    	new DownloadAndParseTask(this).execute();
 			return true;
+		case R.id.settings:
+			startActivity(new Intent(this, Preferences.class));
+			return true;
 		case R.id.about:
             AlertDialog.Builder about = new AlertDialog.Builder(this);
             about.setTitle(R.string.about);

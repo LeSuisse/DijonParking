@@ -50,5 +50,6 @@
         <item>Places libres</item>
     </string-array>
     <string name="tripar">Trier par...</string>
+    <string name="settings">Paramètres</string>
     
 </resources>
