@@ -17,8 +17,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.dijonparking"
-      android:versionName="@string/version_name" android:versionCode="9"
-      android:installLocation="auto">
+      android:versionName="@string/version_name" android:installLocation="auto" android:versionCode="10">
     <uses-sdk android:minSdkVersion="4" />
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
