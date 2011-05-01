@@ -205,6 +205,10 @@ public class Parking implements Comparable<Parking>, Parcelable{
 			value = nbPlaceDispoHoraire;
 			valueAnother = another.nbPlaceDispoHoraire;
 			break;
+		case StaticPreferences.TRI_POURCENTAGE_PLACE:
+			value = nbPlaceDispoTotal/capTotale;
+			valueAnother = another.nbPlaceDispoTotal/another.capTotale;
+			break;
 		default:
 			value = 0;
 			valueAnother = 0;

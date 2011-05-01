@@ -25,6 +25,7 @@ package org.dijonparking.util;
 public class StaticPreferences {
 	public final static int TRI_PROXIMITE = 0;
 	public final static int TRI_NB_PLACES = 1;
+	public final static int TRI_POURCENTAGE_PLACE = 2;
 
 	private static int tri = 0;
 	
