@@ -43,6 +43,7 @@
     <string-array name="tri">
         <item>Proximité</item>
         <item>Places libres</item>
+        <item>Pourcentage de places libres</item>
     </string-array>
     <string name="tripar">Trier par...</string>
     <string name="settings">Paramètres</string>

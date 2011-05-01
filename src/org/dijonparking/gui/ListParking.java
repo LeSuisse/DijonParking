@@ -95,7 +95,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
     @Override
     public void onResume() {
     	super.onResume();
-        String prefTri = PreferenceManager.getDefaultSharedPreferences(this).getString("tri", "0");
+        String prefTri = PreferenceManager.getDefaultSharedPreferences(this).getString("tri", "1");
         StaticPreferences.setTri(Integer.valueOf(prefTri));
        	startGps();
        	updateListView();
