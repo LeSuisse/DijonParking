@@ -220,7 +220,15 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		else if (value < 0)
 			res = 1;
 		else
-			res = value - valueAnother;
+			switch (StaticPreferences.getTri()) {
+			case StaticPreferences.TRI_PROXIMITE:
+				res = value - valueAnother;
+				break;
+			default:
+				res = valueAnother - value;
+				break;
+			}
+			
 		return res;
 	}
 
