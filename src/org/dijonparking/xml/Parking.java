@@ -205,6 +205,10 @@ public class Parking implements Comparable<Parking>, Parcelable{
 			value = nbPlaceDispoHoraire;
 			valueAnother = another.nbPlaceDispoHoraire;
 			break;
+		case StaticPreferences.TRI_POURCENTAGE_PLACE:
+			value = nbPlaceDispoTotal/capTotale;
+			valueAnother = another.nbPlaceDispoTotal/another.capTotale;
+			break;
 		default:
 			value = 0;
 			valueAnother = 0;
@@ -216,7 +220,15 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		else if (value < 0)
 			res = 1;
 		else
-			res = value - valueAnother;
+			switch (StaticPreferences.getTri()) {
+			case StaticPreferences.TRI_PROXIMITE:
+				res = value - valueAnother;
+				break;
+			default:
+				res = valueAnother - value;
+				break;
+			}
+			
 		return res;
 	}
 

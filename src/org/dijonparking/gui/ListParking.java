@@ -27,6 +27,7 @@ import greendroid.widget.QuickActionWidget;
 import greendroid.widget.QuickActionWidget.OnQuickActionClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 import org.dijonparking.R;
@@ -63,6 +64,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
 	private ArrayList<Parking> parkings;
 	private LocationManager locationManager;
 	private int positionListvClicked;
+	private Parking parkingClicked;
 	
     /** Called when the activity is first created. */
     @Override
@@ -81,7 +83,8 @@ public class ListParking extends GDListActivity  implements LocationListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-				positionListvClicked = position;
+				parkingClicked = adapter.getItem(position);
+
 				if (parkings.get(position).getLatitude() != 0 && parkings.get(position).getLongitude() != 0) {
 					mBar.show(arg1);
 				}
@@ -95,7 +98,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
     @Override
     public void onResume() {
     	super.onResume();
-        String prefTri = PreferenceManager.getDefaultSharedPreferences(this).getString("tri", "0");
+        String prefTri = PreferenceManager.getDefaultSharedPreferences(this).getString("tri", "1");
         StaticPreferences.setTri(Integer.valueOf(prefTri));
        	startGps();
        	updateListView();
@@ -192,8 +195,9 @@ public class ListParking extends GDListActivity  implements LocationListener {
                                 listParking.get(res).setDistance(park.getDistance());
                 }
             }
+            
             parkings = listParking;
-        
+            
             updateListView();
 		}
 		
@@ -208,6 +212,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
     private void updateListView() {
     	if (adapter == null) {
     		if (parkings != null) {
+    			Collections.sort(parkings);
     			adapter = new ListParkingAdapter(this, parkings);
     			listView.setAdapter(adapter);
     		}
@@ -219,6 +224,8 @@ public class ListParking extends GDListActivity  implements LocationListener {
 					return object1.compareTo(object2);
 				}
 			});
+    		Collections.sort(parkings);
+    		adapter.notifyDataSetChanged();
     	}
     }
     
@@ -249,7 +256,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
     
     private void startInfoActivity() {
 		Intent it = new Intent(getApplicationContext(), InfoParking.class);
-		it.putExtra("parking", parkings.get(positionListvClicked));
+		it.putExtra("parking", parkingClicked);
 		startActivity(it);
     }
     
