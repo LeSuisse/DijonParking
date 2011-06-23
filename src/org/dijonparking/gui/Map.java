@@ -17,22 +17,28 @@
  */
 package org.dijonparking.gui;
 
+import greendroid.app.GDMapActivity;
+
 import org.dijonparking.R;
 
 import android.os.Bundle;
 
-import com.google.android.maps.MapActivity;
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
-public class Map extends MapActivity {
+public class Map extends GDMapActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map);
+        setActionBarContentView(R.layout.map);
         
-        MapView map = (MapView) findViewById(R.id.myMap);
+        final MapView map = (MapView) findViewById(R.id.map);
         map.setBuiltInZoomControls(true);
+        map.getController().setZoom(12);
+        //Carter centrer sur Dijon au dméarrage
+        final GeoPoint initPoint = new GeoPoint(47318575, 5038309);
+        map.getController().setCenter(initPoint);
         
     }
 
@@ -40,4 +46,5 @@ public class Map extends MapActivity {
 	protected boolean isRouteDisplayed() {
 		return false;
 	}
+
 }

@@ -74,7 +74,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
         listView = getListView();
         getActionBar().setType(greendroid.widget.ActionBar.Type.Empty);
         getActionBar().addItem(Type.Refresh);
-        getActionBar().addItem(Type.Settings);
+        getActionBar().addItem(Type.Compass);
         getActionBar().addItem(Type.Help);
         
     	new DownloadAndParseTask(this).execute();
@@ -147,7 +147,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
 			((LoaderActionBarItem) item).setLoading(false);
 			return true;
 		case 1:
-			startActivity(new Intent(this, Preferences.class));
+			startActivity(new Intent(this, Map.class));
 			return true;
 		case 2:
 			AlertDialog.Builder help = new AlertDialog.Builder(this);
