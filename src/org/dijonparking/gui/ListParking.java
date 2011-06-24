@@ -147,7 +147,7 @@ public class ListParking extends GDListActivity  implements LocationListener {
 			((LoaderActionBarItem) item).setLoading(false);
 			return true;
 		case 1:
-			startActivity(new Intent(this, Map.class));
+			startMapActivity();
 			return true;
 		case 2:
 			AlertDialog.Builder help = new AlertDialog.Builder(this);
@@ -258,6 +258,12 @@ public class ListParking extends GDListActivity  implements LocationListener {
 		Intent it = new Intent(getApplicationContext(), InfoParking.class);
 		it.putExtra("parking", parkingClicked);
 		startActivity(it);
+    }
+    
+    private void startMapActivity() {
+    	Intent it = new Intent(this, Map.class);
+    	it.putExtra("parkings", parkings);
+    	startActivity(it);
     }
     
     private void startRouteActivity() {
