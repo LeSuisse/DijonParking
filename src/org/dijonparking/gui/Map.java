@@ -131,18 +131,27 @@ public class Map extends GDMapActivity {
 	}
 	
 	private static final int getColor(double ratio) {
-		int color;
+		int r, g, b;
 		
 		if (ratio < 0)
-			color = Color.GRAY;
-		else if (ratio < 0.2)
-			color = Color.RED;
-		else if (ratio < 0.4)
-			color = Color.YELLOW;
-		else
-			color = Color.GREEN;
+			r = g = b = 171;
+		else if (ratio < 0.2) {
+			r = 222;
+			g = 0;
+			b = 56;
+		}
+		else if (ratio < 0.4) {
+			r = 255;
+			g = 140;
+			b = 0;
+		}
+		else {
+			r = 113;
+			g = 211;
+			b = 0;
+		}
 		
-		return color;
+		return Color.rgb(r, g, b);
 	}
 
 	private static int addRGB(int color, int amount) {
