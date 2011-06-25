@@ -35,6 +35,7 @@ import android.os.Bundle;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.OverlayItem;
 
 public class Map extends GDMapActivity {
@@ -58,6 +59,10 @@ public class Map extends GDMapActivity {
         map.getController().setCenter(new GeoPoint(47318575, 5038309));
         
         parkings = (ArrayList<Parking>) getIntent().getExtras().get("parkings");
+        
+        MyLocationOverlay myLocOver = new MyLocationOverlay(this, map);
+        myLocOver.enableMyLocation();
+        map.getOverlays().add(myLocOver);
         
         updateMapPin();
     }
