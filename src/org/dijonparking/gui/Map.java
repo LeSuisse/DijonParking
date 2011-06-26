@@ -20,17 +20,25 @@ package org.dijonparking.gui;
 import greendroid.app.GDMapActivity;
 import greendroid.graphics.drawable.DrawableStateSet;
 import greendroid.graphics.drawable.MapPinDrawable;
+import greendroid.widget.ActionBarItem;
+import greendroid.widget.LoaderActionBarItem;
+import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
 
 import org.dijonparking.R;
+import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -51,12 +59,14 @@ public class Map extends GDMapActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActionBarContentView(R.layout.map);
+        getActionBar().addItem(Type.Refresh);
+        getActionBar().addItem(Type.Help);
         
         map = (MapView) findViewById(R.id.map);
         map.setBuiltInZoomControls(true);
-        map.getController().setZoom(12);
+        map.getController().setZoom(15);
         //Carte centrée sur Dijon au démarrage
-        map.getController().setCenter(new GeoPoint(47318575, 5038309));
+        map.getController().setCenter(new GeoPoint(47322769, 5042562));
         
         parkings = (ArrayList<Parking>) getIntent().getExtras().get("parkings");
         
@@ -72,6 +82,42 @@ public class Map extends GDMapActivity {
 		return false;
 	}
 	
+	@Override
+	public boolean onHandleActionBarItemClick(ActionBarItem item, int position) {
+		switch (position) {
+		case 0:
+			((LoaderActionBarItem) item).setLoading(false);
+			new DownloadAndParseTask(this).execute();
+			return true;
+		case 1:
+			AlertDialog.Builder help = new AlertDialog.Builder(this);
+			help.setTitle(R.string.significationcouleurpoint);
+			View changes = getLayoutInflater().inflate(R.layout.help, null);
+			help.setView(changes).show();
+			return true;
+		default:
+			return super.onHandleActionBarItemClick(item, position);
+		}
+	}
+	
+	private class DownloadAndParseTask extends DownloaderAndParser {
+
+		public DownloadAndParseTask(Context context) {
+			super(context);
+		}
+
+		@Override
+		protected void finalOperations(ArrayList<Parking> listParking) {
+			parkings = listParking;
+		}
+
+		@Override
+		protected void restartTask() {
+			new DownloadAndParseTask(getContext()).execute();
+		}
+		
+	}
+	
 	private void updateMapPin() {
 		final Resources r = getResources();
 		
@@ -84,7 +130,7 @@ public class Map extends GDMapActivity {
 			BasicItemizedOverlay itemizedOverlay = new BasicItemizedOverlay(new MapPinDrawable(r, getColorStateList(ratio), getColorStateList(ratio)));
 			final GeoPoint pos = new GeoPoint((int) (parking.getLatitude()*E6), (int) (parking.getLongitude()*E6));
 
-			itemizedOverlay.addOverlay(new OverlayItem(pos, parking.getNom(), null));
+			itemizedOverlay.addOverlay(new OverlayItem(pos, parking.getNom(), null), parking);
 			
 			map.getOverlays().add(itemizedOverlay);
 		}
@@ -93,13 +139,15 @@ public class Map extends GDMapActivity {
 	private class BasicItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+        private ArrayList<Parking> mParkings = new ArrayList<Parking>();
 
         public BasicItemizedOverlay(Drawable defaultMarker) {
             super(boundCenterBottom(defaultMarker));
         }
 
-        public void addOverlay(OverlayItem overlay) {
+        public void addOverlay(OverlayItem overlay, Parking parking) {
             mOverlays.add(overlay);
+            mParkings.add(parking);
             populate();
         }
 
@@ -115,6 +163,9 @@ public class Map extends GDMapActivity {
 
         @Override
         protected boolean onTap(int index) {
+        	Intent it = new Intent(getApplicationContext(), InfoParking.class);
+    		it.putExtra("parking", mParkings.get(index));
+    		startActivity(it);
             return true;
         }
 
