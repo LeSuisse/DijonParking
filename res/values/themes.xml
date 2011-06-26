@@ -22,6 +22,6 @@
 	
 	</style>
 	
-	<dimen name="gd_action_bar_height">38dp</dimen>
+	<!--<dimen name="gd_action_bar_height">38dp</dimen>-->
 
 </resources>
