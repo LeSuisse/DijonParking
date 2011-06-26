@@ -16,6 +16,8 @@ import org.dijonparking.xml.DownloaderAndParser;
 import org.dijonparking.xml.Parking;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SimpleExpandableListAdapter;
@@ -35,6 +37,7 @@ public class InfoParking extends GDExpandableListActivity {
 		setContentView(R.layout.infoparking);
 		
 		getActionBar().addItem(Type.Refresh);
+		getActionBar().addItem(Type.Export);
 		
 		parking = getIntent().getExtras().getParcelable("parking");
 		
@@ -47,7 +50,11 @@ public class InfoParking extends GDExpandableListActivity {
 			new DownloadAndParseTask(this).execute();
 			((LoaderActionBarItem) item).setLoading(false);
 			return true;
-
+		case 1:
+			String direction = "google.navigation:q="+parking.getLatitude()+","+parking.getLongitude();
+			Intent it = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(direction));
+			startActivity(it);
+			return true;
 		default:
 			return super.onHandleActionBarItemClick(item, position);
 		}
