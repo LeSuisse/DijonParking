@@ -36,19 +36,19 @@ public class ContainerParking {
 	public static ArrayList<Parking> getParkings() throws Exception {
 		//Obtention instance d'un parseur SAX
 		SAXParser sp = SAXParserFactory.newInstance().newSAXParser();
-		
+
 		DefaultHandler handler = new ParkingHandler();
 		// Récupération du fichier XML et parsing
-			URLConnection urlC = (new URL(URL_XML)).openConnection();
-			urlC.setRequestProperty("USER-AGENT", USER_AGENT);
-			InputSource inSo = new InputSource(urlC.getInputStream());
-			inSo.setEncoding(ENCODING);
-			ArrayList<Parking> listParking = null;
-			if (inSo != null) {
-				sp.parse(inSo, handler);
-				listParking = ((ParkingHandler) handler).getParkings();
-			}
-	
+		URLConnection urlC = (new URL(URL_XML)).openConnection();
+		urlC.setRequestProperty("USER-AGENT", USER_AGENT);
+		InputSource inSo = new InputSource(urlC.getInputStream());
+		inSo.setEncoding(ENCODING);
+		ArrayList<Parking> listParking = null;
+		if (inSo != null) {
+			sp.parse(inSo, handler);
+			listParking = ((ParkingHandler) handler).getParkings();
+		}
+
 		return listParking;
 		
 	}
