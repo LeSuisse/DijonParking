@@ -25,6 +25,7 @@ import greendroid.widget.LoaderActionBarItem;
 import greendroid.widget.ActionBarItem.Type;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.dijonparking.R;
 import org.dijonparking.xml.DownloaderAndParser;
@@ -53,6 +54,7 @@ public class Map extends GDMapActivity {
 	private MapView map;
 	
 	private ArrayList<Parking> parkings;
+	private List<MyLocationOverlay> myLocOver;
 	
     /** Called when the activity is first created. */
     @Override
@@ -70,9 +72,10 @@ public class Map extends GDMapActivity {
         
         parkings = (ArrayList<Parking>) getIntent().getExtras().get("parkings");
         
-        MyLocationOverlay myLocOver = new MyLocationOverlay(this, map);
-        myLocOver.enableMyLocation();
-        map.getOverlays().add(myLocOver);
+        myLocOver = new ArrayList<MyLocationOverlay>(1);
+        myLocOver.add(new MyLocationOverlay(this, map));
+        myLocOver.get(0).enableMyLocation();
+        map.getOverlays().add(myLocOver.get(0));
         
         updateMapPin();
     }
@@ -109,6 +112,7 @@ public class Map extends GDMapActivity {
 		@Override
 		protected void finalOperations(ArrayList<Parking> listParking) {
 			parkings = listParking;
+			updateMapPin();
 		}
 
 		@Override
@@ -120,6 +124,8 @@ public class Map extends GDMapActivity {
 	
 	private void updateMapPin() {
 		final Resources r = getResources();
+		
+		map.getOverlays().retainAll(myLocOver);
 		
 		for (Parking parking : parkings) {
 			double ratio = -1;
@@ -134,6 +140,7 @@ public class Map extends GDMapActivity {
 			
 			map.getOverlays().add(itemizedOverlay);
 		}
+		System.out.println(map.getOverlays().size());
 	}
 	
 	private class BasicItemizedOverlay extends ItemizedOverlay<OverlayItem> {

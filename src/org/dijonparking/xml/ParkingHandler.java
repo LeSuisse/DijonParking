@@ -18,11 +18,10 @@
 package org.dijonparking.xml;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
-import android.os.Bundle;
 
 public class ParkingHandler extends DefaultHandler {
 	//Tags XLM
@@ -50,9 +49,9 @@ public class ParkingHandler extends DefaultHandler {
 	private Parking parkingCourant;
 	//Stockage info tarifs
 	private String duree;
-	private String montant;
-	private Bundle tarifs;
-	
+	private float montant;
+	private TreeMap<Float, String> tarifs;
+	private boolean tarifValide;
 	//Fix pour le parking Saint Anne
 	private Parking saintanne = null;
 	private Parking sainteanne = null;
@@ -68,10 +67,10 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant = new Parking();
 		}
 		else if (localName.equalsIgnoreCase(TARIFS)) {
-			tarifs = new Bundle();
+			tarifs = new TreeMap<Float, String>();
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_ABO)) {
-			tarifs = new Bundle();
+			tarifs = new TreeMap<Float, String>();
 		}
 	}
 	
@@ -99,25 +98,39 @@ public class ParkingHandler extends DefaultHandler {
 			parkingCourant.setTarifs(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE)) {
-			tarifs.putString(montant, duree);
+			if (tarifValide)
+				tarifs.put(montant, duree);
 		}
 		else if (localName.equalsIgnoreCase(DUREE)) {
 			duree = valeurCourante;
 		}
 		else if (localName.equalsIgnoreCase(MONTANT)) {
-			montant = valeurCourante.split("( euros)|( euro)")[0].replace(',', '.');
+			tarifValide = true;
+			try {
+				montant = Float.parseFloat(valeurCourante.split("( euros)|( euro)")[0].replace(',', '.'));
+			}
+			catch (NumberFormatException ex) {
+				tarifValide = false;
+			}
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_ABO)) {
 			parkingCourant.setTarifsAbo(tarifs);
 		}
 		else if (localName.equalsIgnoreCase(TARIFS_HORAIRE_ABO)) {
-			tarifs.putString(montant, duree);
+			if (tarifValide)
+				tarifs.put(montant, duree);
 		}
 		else if (localName.equalsIgnoreCase(DUREE_ABO)) {
 			duree = valeurCourante;
 		}
 		else if (localName.equalsIgnoreCase(MONTANT_ABO)) {
-			montant = valeurCourante.split("( euros)|( euro)")[0].replace(',', '.');
+			tarifValide = true;
+			try {
+				montant = Float.parseFloat(valeurCourante.split("( euros)|( euro)")[0].replace(',', '.'));
+			}
+			catch (NumberFormatException ex) {
+				tarifValide = false;
+			}
 		}
 		else if (localName.equalsIgnoreCase(PARKING)) {
 			arlParkings.add(parkingCourant);
