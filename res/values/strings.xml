@@ -16,7 +16,7 @@
 	~ along with Dijon Parking.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-    <string name="app_name">Dijon Parking</string><string name="version_name">0.2.0</string>
+    <string name="app_name">Dijon Parking</string><string name="version_name">0.2.1</string>
     <string name="apiKey">0TEhM8-83NqGUleU2oauvbwB8xRfZI9Z_1pCkMA</string>
     <string name="refresh">Refresh</string>
     <string name="loading">Loading...</string>
