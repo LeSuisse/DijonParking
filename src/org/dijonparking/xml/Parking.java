@@ -17,10 +17,11 @@
  */
 package org.dijonparking.xml;
 
+import java.util.TreeMap;
+
 import org.dijonparking.util.StaticPreferences;
 
 import android.location.Location;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -31,8 +32,8 @@ public class Parking implements Comparable<Parking>, Parcelable{
 	private int nbPlaceDispoTotal = -1;
 	private int nbPlaceDispoHoraire = -1;
 	private int nbPlaceDispoAbo = -1;
-	private Bundle tarifs;
-	private Bundle tarifsAbo;
+	private TreeMap<Float, String> tarifs;
+	private TreeMap<Float, String> tarifsAbo;
 	private int distance = -1;
 
 	public Parking() {
@@ -46,8 +47,14 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		nbPlaceDispoTotal = in.readInt();
 		nbPlaceDispoHoraire = in.readInt();
 		nbPlaceDispoAbo = in.readInt();
-		tarifs = in.readBundle();
-		tarifsAbo = in.readBundle();
+		int taille = in.readInt();
+		tarifs = new TreeMap<Float, String>();
+		for (int i = 0; i < taille; i++)
+			tarifs.put(in.readFloat(), in.readString());
+		taille = in.readInt();
+		tarifsAbo = new TreeMap<Float, String>();
+		for (int i = 0; i < taille; i++)
+			tarifsAbo.put(in.readFloat(), in.readString());
 		distance = in.readInt();
 	}
 
@@ -99,19 +106,19 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		this.nbPlaceDispoAbo = nbPlaceDispoAbo;
 	}
 
-	public Bundle getTarifs() {
+	public TreeMap<Float, String> getTarifs() {
 		return tarifs;
 	}
 
-	public void setTarifs(Bundle tarifs) {
+	public void setTarifs(TreeMap<Float, String> tarifs) {
 		this.tarifs = tarifs;
 	}
 
-	public Bundle getTarifsAbo() {
+	public TreeMap<Float, String> getTarifsAbo() {
 		return tarifsAbo;
 	}
 
-	public void setTarifsAbo(Bundle tarifsAbo) {
+	public void setTarifsAbo(TreeMap<Float, String> tarifsAbo) {
 		this.tarifsAbo = tarifsAbo;
 
 	}
@@ -259,8 +266,16 @@ public class Parking implements Comparable<Parking>, Parcelable{
 		dest.writeInt(nbPlaceDispoTotal);
 		dest.writeInt(nbPlaceDispoHoraire);
 		dest.writeInt(nbPlaceDispoAbo);
-		dest.writeBundle(tarifs);
-		dest.writeBundle(tarifsAbo);
+		dest.writeInt(tarifs.size());
+		for (float key : tarifs.keySet()) {
+			dest.writeFloat(key);
+			dest.writeString(tarifs.get(key));
+		}
+		dest.writeInt(tarifsAbo.size());
+		for (float key : tarifsAbo.keySet()) {
+			dest.writeFloat(key);
+			dest.writeString(tarifsAbo.get(key));
+		}
 		dest.writeInt(distance);
 	}
 	

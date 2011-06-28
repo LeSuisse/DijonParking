@@ -26,7 +26,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.TreeMap;
 
 import org.dijonparking.R;
 import org.dijonparking.xml.DownloaderAndParser;
@@ -43,8 +42,6 @@ import android.widget.TextView;
 public class InfoParking extends GDExpandableListActivity {
 
 	private Parking parking;
-	private TreeMap<Float, String> tarifs = null;
-	private TreeMap<Float, String> tarifsAbo = null;
 	private final static DecimalFormat df = new DecimalFormat("0.00");
 	
 	/** Called when the activity is first created. */
@@ -150,9 +147,6 @@ public class InfoParking extends GDExpandableListActivity {
 			res = getString(R.string.captotale, parking.getCapTotale());
 		((TextView) findViewById(R.id.capacite_totale)).setText(res);
 		
-		//Tri en fonction des tarifs
-		sortTarifs();
-		
 		//Affichage des tarifs
 		SimpleExpandableListAdapter exAdapt = new SimpleExpandableListAdapter(
 				this,
@@ -167,27 +161,6 @@ public class InfoParking extends GDExpandableListActivity {
 		);
 		setListAdapter(exAdapt);
 	}
-	
-	private void sortTarifs() {
-		if (parking.getTarifs() != null) {
-			tarifs = new TreeMap<Float, String>();
-			for (String key : parking.getTarifs().keySet()) {
-				try {
-					tarifs.put(Float.parseFloat(key), (String) parking.getTarifs().get(key));
-				}
-				catch (Exception e) {}
-			}
-		}
-		if (parking.getTarifsAbo() != null) {
-			tarifsAbo = new TreeMap<Float, String>();
-			for (String key : parking.getTarifsAbo().keySet()) {
-				try {
-					tarifsAbo.put(Float.parseFloat(key), (String) parking.getTarifsAbo().get(key));
-				}
-				catch (Exception e) {}
-			}
-		}
-	}
 
 	/**
 	 * 
@@ -196,12 +169,12 @@ public class InfoParking extends GDExpandableListActivity {
 	private ArrayList<HashMap<String, String>> groupList() {
 		ArrayList<HashMap<String, String>> groupList = new ArrayList<HashMap<String,String>>();
 		HashMap<String, String> m;
-		if (tarifs.size() != 0) {
+		if (parking.getTarifs().size() > 0) {
 			m = new HashMap<String, String>();
 			m.put("type", getString(R.string.tarifshoraires));
 			groupList.add(m);
 		}
-		if (tarifsAbo.size() != 0) {
+		if (parking.getTarifsAbo().size() > 0) {
 			m = new HashMap<String, String>();
 			m.put("type", getString(R.string.tarifsabo));
 			groupList.add(m);
@@ -213,24 +186,24 @@ public class InfoParking extends GDExpandableListActivity {
 	private ArrayList<ArrayList<HashMap<String, String>>> childList() {
 		ArrayList<ArrayList<HashMap<String, String>>> childList =new ArrayList<ArrayList<HashMap<String,String>>>();
 		ArrayList<HashMap<String, String>> cont;
-		if (tarifs.size() != 0) {
+		if (parking.getTarifs().size() > 0) {
 			cont = new ArrayList<HashMap<String,String>>();
 			HashMap<String, String> child;
-			for (Float key : tarifs.keySet()) {
+			for (float key : parking.getTarifs().keySet()) {
 				child = new HashMap<String, String>();
 				child.put("montant", df.format(key)+" €");
-				child.put("duree", tarifs.get(key));
+				child.put("duree", parking.getTarifs().get(key));
 				cont.add(child);
 			}
 			childList.add(cont);
 		}
-		if (tarifsAbo.size() != 0) {
+		if (parking.getTarifsAbo().size() > 0) {
 			cont = new ArrayList<HashMap<String,String>>();
 			HashMap<String, String> child;
-			for (Float key : tarifsAbo.keySet()) {
+			for (float key : parking.getTarifsAbo().keySet()) {
 				child = new HashMap<String, String>();
 				child.put("montant", df.format(key)+" €");
-				child.put("duree", tarifsAbo.get(key));
+				child.put("duree", parking.getTarifsAbo().get(key));
 				cont.add(child);
 			}
 			childList.add(cont);

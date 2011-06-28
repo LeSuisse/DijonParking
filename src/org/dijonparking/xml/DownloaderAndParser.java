@@ -17,6 +17,7 @@
  */
 package org.dijonparking.xml;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.dijonparking.R;
@@ -29,9 +30,12 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayList<Parking>> {	
+public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayList<Parking>> {
+	private static enum TypeErreur {NETWORK, NULL, MISC};
+	
 	private Context context;
 	private ProgressDialog dialog;
+	private TypeErreur erreur;
 
 	public DownloaderAndParser(Context context) {
 		super();
@@ -51,8 +55,14 @@ public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayLis
 		try {
 			listParking = ContainerParking.getParkings();
 		}
+		catch (IOException e) {
+			erreur = TypeErreur.NETWORK;
+		}
+		catch (NullPointerException e) {
+			erreur = TypeErreur.NULL;
+		}
 		catch (Exception e) {
-			e.printStackTrace();
+			erreur = TypeErreur.MISC;
 		}
 		return listParking;
 	}
@@ -61,17 +71,27 @@ public abstract class DownloaderAndParser extends AsyncTask<Void, Void, ArrayLis
 	protected void onPostExecute(ArrayList<Parking> listParking) {
 		dialog.dismiss();
 		if (listParking == null) {
-			internalError();
+			switch (erreur) {
+			case NETWORK:
+				alertDialogError(context.getText(R.string.network_error));
+				break;
+			case NULL:
+				alertDialogError(context.getText(R.string.nullerror));
+				break;
+			default:
+				alertDialogError(context.getText(R.string.internalerror));
+				break;
+			}
 		}
 		else {
 			finalOperations(listParking);
 		}
 	}
 
-	private void internalError() {
+	private void alertDialogError(CharSequence mess) {
 		Log.i("Dijon Parking", "IE");
     	AlertDialog.Builder builder = new AlertDialog.Builder(context);
-    	builder.setMessage(context.getText(R.string.internalerror))
+    	builder.setMessage(mess)
     		   .setCancelable(false)
     		   .setPositiveButton(context.getText(R.string.retry), new DialogInterface.OnClickListener() {
     		@Override
